@@ -25,13 +25,12 @@ from datetime import datetime
 from datetime import timedelta
 
 params = {
-    'data_folder': './slyflourish_tweets/data/js/tweets/',
-    'output_folder': './slyflourish_tweets/',
+    'data_folder': '../tweets/data/js/tweets/',
+    'output_folder': './tadfad_tweets/',
     'output_file_name': 'tweets',
-    'twitter_user_id': 'slyflourish',
-    'html_header': '<!DOCTYPE html><meta charset="UTF-8">'
-                   '<title>Sly Flourish Tweets</title><h1>Sly Flourish Tweets</h1><ul>',
-    'html_footer': '\n</ul>'}
+    'twitter_user_id': 'tadfad',
+    'md_header': '**Tweet:**',
+    'md_footer': '\n #tweet'}
 
 
 def load_json_data_from_files(data_folder):
@@ -77,7 +76,7 @@ def output_sqlite(json_input):
 
 
 def output_html(tweets):
-    html_output = ""
+    md_output = ""
     for item in tweets:
         d = datetime.strptime(item['created_at'],
             '%a %b %d %H:%M:%S +0000 %Y') - timedelta(hours=5)
@@ -87,18 +86,17 @@ def output_html(tweets):
         text = link_https_in_text(item['text'])
         tweet_link = 'http://twitter.com/%s/status/%s'\
                      % (params['twitter_user_id'], item['id'])
-        html_output += '<li id=%s>%s - <a href="%s">'\
-                       '<time datetime="%s">%s</time></a></li>\n\n' \
+        md_output += 'dayone -d+"' + day_string + '" new'\
                         % (item['id'],
                            text,
                            tweet_link,
                            time_element,
                            day_string)
-    fpath = params['output_folder']+params['output_file_name']+'.html'
+    fpath = params['output_folder']+params['output_file_name']+'.md'
     with open(fpath, "w") as f:
-        f.write(params['html_header'])
+        f.write(params['md_header'])
         f.write(html_output.encode('utf-8'))
-        f.write(params['html_footer'])
+        f.write(params['md_footer'])
 
 
 def output_text(tweets):
